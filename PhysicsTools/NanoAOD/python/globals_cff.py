@@ -3,6 +3,7 @@ from PhysicsTools.NanoAOD.common_cff import *
 
 rhoTable = cms.EDProducer("GlobalVariablesTableProducer",
     variables = cms.PSet(
+        fixedGridRhoAll = ExtVar( cms.InputTag("fixedGridRhoAll"), "double", doc = "rho from all PF Candidates, no foreground removal (for isolation of prompt photons)" ),
         fixedGridRhoFastjetAll = ExtVar( cms.InputTag("fixedGridRhoFastjetAll"), "double", doc = "rho from all PF Candidates, used e.g. for JECs" ),
         fixedGridRhoFastjetCentralNeutral = ExtVar( cms.InputTag("fixedGridRhoFastjetCentralNeutral"), "double", doc = "rho from neutral PF Candidates with |eta| < 2.5, used e.g. for rho corrections of some lepton isolations" ),
         fixedGridRhoFastjetCentralCalo = ExtVar( cms.InputTag("fixedGridRhoFastjetCentralCalo"), "double", doc = "rho from calo towers with |eta| < 2.5, used e.g. egamma PFCluster isolation" ),
@@ -15,15 +16,15 @@ puTable = cms.EDProducer("NPUTablesProducer",
         src = cms.InputTag("slimmedAddPileupInfo"),
         pvsrc = cms.InputTag("offlineSlimmedPrimaryVertices"),
         zbins = cms.vdouble( [0.0,1.7,2.6,3.0,3.5,4.2,5.2,6.0,7.5,9.0,12.0] ),
-        savePtHatMax = cms.bool(False), 
+        savePtHatMax = cms.bool(False),
 )
 
 genTable  = cms.EDProducer("SimpleGenEventFlatTableProducer",
         src = cms.InputTag("generator"),
-        cut = cms.string(""), 
+        cut = cms.string(""),
         name= cms.string("Generator"),
         doc = cms.string("Generator information"),
-        singleton = cms.bool(True), 
+        singleton = cms.bool(True),
         extension = cms.bool(False),
     variables = cms.PSet(
         x1 = Var( "?hasPDF?pdf().x.first:-1", float, doc="x1 fraction of proton momentum carried by the first parton",precision=14 ),

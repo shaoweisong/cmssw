@@ -65,7 +65,7 @@ for modifier in run2_miniAOD_80XLegacy,run2_nanoAOD_94X2016:
             'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_iso_V1_cff',
             'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_noIso_V1_cff',
             'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_iso_V2_cff',
-            'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_noIso_V2_cff', 
+            'RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_noIso_V2_cff',
             'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Summer16_80X_V1_cff',
             'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronHLTPreselecition_Summer16_V1_cff',
             'RecoEgamma.ElectronIdentification.Identification.cutBasedElectronID_Spring15_25ns_V1_cff',
@@ -79,7 +79,7 @@ for modifier in run2_miniAOD_80XLegacy,run2_nanoAOD_94X2016:
             "egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V2-tight",
             )
 )
- 
+
 
 def _get_bitmapVIDForEle_docstring(modules,WorkingPoints):
     docstring=''
@@ -133,7 +133,7 @@ isoForEle = cms.EDProducer("EleIsoValueMapProducer",
     EAFile_MiniIso = cms.FileInPath("RecoEgamma/ElectronIdentification/data/Fall17/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_94X.txt"),
     EAFile_PFIso = cms.FileInPath("RecoEgamma/ElectronIdentification/data/Fall17/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_94X.txt"),
 )
-run2_miniAOD_80XLegacy.toModify(isoForEle, 
+run2_miniAOD_80XLegacy.toModify(isoForEle,
                                 EAFile_MiniIso = "RecoEgamma/ElectronIdentification/data/Spring15/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_25ns.txt",
                                 EAFile_PFIso = "RecoEgamma/ElectronIdentification/data/Summer16/effAreaElectrons_cone03_pfNeuHadronsAndPhotons_80X.txt")
 run2_nanoAOD_94X2016.toModify(isoForEle,
@@ -158,7 +158,7 @@ calibratedPatElectronsNano = RecoEgamma.EgammaTools.calibratedEgammas_cff.calibr
 #the second part is introduced to protect v8 since (run2_nanoAOD_106Xv1 & ~run2_nanoAOD_devel) is the v8 condition
 (run2_egamma_2016 & tracker_apv_vfp30_2016 & ~(run2_nanoAOD_106Xv1 & ~run2_nanoAOD_devel)).toModify(calibratedPatElectronsNano,
     correctionFile = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2016_UltraLegacy_preVFP_RunFineEtaR9Gain")
-) 
+)
 
 (run2_egamma_2016 & ~tracker_apv_vfp30_2016 & ~(run2_nanoAOD_106Xv1 & ~run2_nanoAOD_devel)).toModify(calibratedPatElectronsNano,
     correctionFile = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2016_UltraLegacy_postVFP_RunFineEtaR9Gain")
@@ -177,7 +177,7 @@ run2_miniAOD_80XLegacy.toModify(calibratedPatElectronsNano,
                             )
 
 for modifier in run2_nanoAOD_94XMiniAODv1,run2_nanoAOD_94XMiniAODv2:
-    modifier.toModify(calibratedPatElectronsNano, 
+    modifier.toModify(calibratedPatElectronsNano,
         correctionFile = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_17Nov2017_v1_ele_unc")
     )
 
@@ -254,8 +254,8 @@ run2_nanoAOD_94X2016.toModify(slimmedElectronsWithUserData.userFloats,
                               energyScaleDownNew             = None,
                               energySigmaUpNew               = None,
                               energySigmaDownNew             = None
-                              
-                              
+
+
 )
 
 run2_nanoAOD_94X2016.toModify(slimmedElectronsWithUserData.userIntFromBools,
@@ -268,12 +268,12 @@ run2_nanoAOD_94X2016.toModify(slimmedElectronsWithUserData.userIntFromBools,
     cutbasedID_Spring15_veto = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-veto"),
     cutbasedID_Spring15_loose = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-loose"),
     cutbasedID_Spring15_medium = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-medium"),
-    cutbasedID_Spring15_tight = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-tight"), 
+    cutbasedID_Spring15_tight = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Spring15-25ns-V1-standalone-tight"),
     cutbasedID_Fall17_V2_veto = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V2-veto"),
     cutbasedID_Fall17_V2_loose = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V2-loose"),
     cutbasedID_Fall17_V2_medium = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V2-medium"),
     cutbasedID_Fall17_V2_tight = cms.InputTag("egmGsfElectronIDs:cutBasedElectronID-Fall17-94X-V2-tight"),
-    
+
 )
 
 run2_miniAOD_80XLegacy.toModify(slimmedElectronsWithUserData.userFloats,
@@ -349,6 +349,7 @@ electronTable = cms.EDProducer("SimpleCandidateFlatTableProducer",
         dxyErr = Var("edB('PV2D')",float,doc="dxy uncertainty, in cm",precision=6),
         ip3d = Var("abs(dB('PV3D'))",float,doc="3D impact parameter wrt first PV, in cm",precision=10),
         sip3d = Var("abs(dB('PV3D')/edB('PV3D'))",float,doc="3D impact parameter significance wrt first PV, in cm",precision=10),
+        scEta = Var("superCluster().eta()",float,doc="eta of the supercluster",precision=10),
         deltaEtaSC = Var("superCluster().eta()-eta()",float,doc="delta eta (SC,ele) with sign",precision=10),
         r9 = Var("full5x5_r9()",float,doc="R9 of the supercluster, calculated with full 5x5 region",precision=10),
         sieie = Var("full5x5_sigmaIetaIeta()",float,doc="sigma_IetaIeta of the supercluster, calculated with full 5x5 region",precision=10),
@@ -395,7 +396,7 @@ electronTable = cms.EDProducer("SimpleCandidateFlatTableProducer",
 #therefore we redo it but but we need use a new name for the userFloat as we cant override existing userfloats
 #for technical reasons
 for modifier in run2_nanoAOD_94XMiniAODv1,run2_nanoAOD_94XMiniAODv2,run2_miniAOD_80XLegacy,run2_nanoAOD_102Xv1,run2_nanoAOD_106Xv1,run2_nanoAOD_106Xv2:
-    modifier.toModify(electronTable.variables,            
+    modifier.toModify(electronTable.variables,
         pt = Var("pt*userFloat('ecalTrkEnergyPostCorrNew')/userFloat('ecalTrkEnergyPreCorrNew')", float, precision=-1, doc="p_{T}"),
         energyErr = Var("userFloat('ecalTrkEnergyErrPostCorrNew')", float, precision=6, doc="energy error of the cluster-track combination"),
         eCorr = Var("userFloat('ecalTrkEnergyPostCorrNew')/userFloat('ecalTrkEnergyPreCorrNew')", float, doc="ratio of the calibrated energy/miniaod energy"),
@@ -493,7 +494,7 @@ electronsMCMatchForTableAlt = cms.EDProducer("GenJetMatcherDRPtByDR",  # cut on 
     maxDPtRel   = cms.double(0.5),              # Minimum deltaPt/Pt for the match
     resolveAmbiguities    = cms.bool(True),     # Forbid two RECO objects to match to the same GEN object
     resolveByMatchQuality = cms.bool(True),    # False = just match input in order; True = pick lowest deltaR pair first
-) 
+)
 
 
 electronsMCMatchForTable = cms.EDProducer("MCMatcher",  # cut on deltaR, deltaPt/Pt; pick best by deltaR
@@ -523,10 +524,10 @@ electronMCTable = cms.EDProducer("CandMCMatchTableProducer",
     mcMap   = cms.InputTag("electronsMCMatchForTable"),
     mapTauAnc = cms.InputTag("matchingElecPhoton:hasTauAnc"),
     objName = electronTable.name,
-    objType = cms.string("ElectronDressed"), 
+    objType = cms.string("ElectronDressed"),
     branchName = cms.string("genPart"),
     docString = cms.string("MC matching to status==1 electrons or photons"),
-    genparticles     = cms.InputTag("finalGenParticles"), 
+    genparticles     = cms.InputTag("finalGenParticles"),
 )
 
 
