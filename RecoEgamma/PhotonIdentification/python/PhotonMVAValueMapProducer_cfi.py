@@ -13,7 +13,9 @@ mvaConfigsForPhoProducer.append( mvaPhoID_RunIIFall17_v1p1_producer_config )
 
 from RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_Fall17_94X_V2_cff import *
 mvaConfigsForPhoProducer.append( mvaPhoID_RunIIFall17_v2_producer_config )
-
+mvaConfigsForPhoProducer.append( modifiedmvaPhoID_RunIIFall17_v2_producer_config )
+print("Registering MVA Photon ID for Fall17")
+print(mvaPhoID_RunIIFall17_v2_producer_config)
 photonMVAValueMapProducer = cms.EDProducer('PhotonMVAValueMapProducer',
                                            # The module automatically detects AOD vs miniAOD, so we configure both
                                            #
@@ -29,3 +31,6 @@ photonMVAValueMapProducer = cms.EDProducer('PhotonMVAValueMapProducer',
                                            #
                                            mvaConfigurations = mvaConfigsForPhoProducer
                                            )
+
+
+print("we are here in PhotonMVAValueMapProducer_cfi.py")

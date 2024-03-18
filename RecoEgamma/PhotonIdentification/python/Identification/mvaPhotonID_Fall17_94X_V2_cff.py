@@ -9,7 +9,9 @@ from RecoEgamma.PhotonIdentification.Identification.mvaPhotonID_tools import *
 # https://indico.cern.ch/event/697079/contributions/2968123/attachments/1632966/2604131/PhotonID_EGM_13.04.2018.pdf
 #
 mvaTag = "RunIIFall17v2"
+modifiedmvaTag = "RunIIFall17v2modified"
 mvaVariablesFile = "RecoEgamma/PhotonIdentification/data/PhotonMVAEstimatorRun2VariablesFall17V1p1.txt"
+modified_mvaVariablesFile = "RecoEgamma/PhotonIdentification/data/PhotonMVAEstimatorRun2VariablesFall17V1p1_modified.txt"
 mvaWeightFiles = [
     path.join(weightFileBaseDir, "Fall17/EB_V2.weights.xml.gz"),
     path.join(weightFileBaseDir, "Fall17/EE_V2.weights.xml.gz"),
@@ -39,6 +41,14 @@ configs = configureFullVIDMVAPhoID(mvaTag=mvaTag,
                                    nCategories         = cms.int32(2),
                                    categoryCuts        = category_cuts)
 mvaPhoID_RunIIFall17_v2_producer_config = configs["producer_config"]
+modified_configs = configureFullVIDMVAPhoID(mvaTag=modifiedmvaTag,
+                                   variablesFile=modified_mvaVariablesFile,
+                                   weightFiles=mvaWeightFiles,
+                                   wpConfig=wpConfig,
+                                   # Category parameters
+                                   nCategories         = cms.int32(2),
+                                   categoryCuts        = category_cuts)
+modifiedmvaPhoID_RunIIFall17_v2_producer_config = modified_configs["producer_config"]
 mvaPhoID_RunIIFall17_v2_wp90            = configs["VID_config"]["mvaPhoID-RunIIFall17-v2-wp90"]
 mvaPhoID_RunIIFall17_v2_wp80            = configs["VID_config"]["mvaPhoID-RunIIFall17-v2-wp80"]
 # The MD5 sum numbers below reflect the exact set of cut variables

@@ -20,7 +20,7 @@ class ElectronMVAID:
         self._init = False
         self._debug = debug
 
-    def __call__(self, ele, convs, beam_spot, rho, debug=False):
+    def __call__(self, ele, rho, debug=False):
         '''returns a tuple mva_value, category 
         ele: a reco::GsfElectron
         convs: conversions
@@ -30,20 +30,17 @@ class ElectronMVAID:
 
         example: 
         
-            event.getByLabel(('slimmedElectrons'),                 ele_handle)
-            event.getByLabel(('fixedGridRhoFastjetAll'),           rho_handle)
-            event.getByLabel(('reducedEgamma:reducedConversions'), conv_handle)
-            event.getByLabel(('offlineBeamSpot'),                  bs_handle)
+            event.getByLabel(('slimmedElectrons'),       ele_handle)
+            event.getByLabel(('fixedGridRhoFastjetAll'), rho_handle)
             
             electrons = ele_handle.product()
-            convs     = conv_handle.product()
-            beam_spot = bs_handle.product()
             rho       = rho_handle.product()
 
-            mva, category = electron_mva_id(electron[0], convs, beam_spot, rho)
+            mva, category = electron_mva_id(electron[0], rho)
         '''
         if not self._init:
             print('Initializing ' + self.name + self.tag)
+            ROOT.gInterpreter.Declare('#include "RecoEgamma/ElectronIdentification/interface/ElectronMVAEstimatorRun2.h"')
             ROOT.gSystem.Load("libRecoEgammaElectronIdentification")
             categoryCutStrings =  ROOT.vector(ROOT.string)()
             for x in self.categoryCuts : 
@@ -52,9 +49,8 @@ class ElectronMVAID:
                 self.tag, self.name, len(self.xmls), 
                 self.variablesFile, categoryCutStrings, self.xmls, self._debug)
             self._init = True
-        extra_vars = self.estimator.getExtraVars(ele, convs, beam_spot, rho[0])
         category = ctypes.c_int(0)
-        mva = self.estimator.mvaValue(ele, extra_vars, category)
+        mva = self.estimator.mvaValue(ele, rho[0], category)
         return mva, category.value
 
 
@@ -70,9 +66,9 @@ class WorkingPoints(object):
 
     def _reformat_cut_definitions(self, working_points):
         new_definitions = dict()
-        for wpname, definitions in working_points.iteritems():
+        for wpname, definitions in working_points.items():
             new_definitions[wpname] = dict()
-            for name, cut in definitions.cuts.iteritems():
+            for name, cut in definitions.cuts.items():
                 categ_id = int(name.lstrip('cutCategory'))
                 cut = cut.replace('pt','x')
                 formula = ROOT.TFormula('_'.join([self.name, wpname, name]), cut)
@@ -90,16 +86,22 @@ class WorkingPoints(object):
 # Import information needed to construct the e/gamma MVAs
 
 from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_tools \
-        import EleMVA_6CategoriesCuts, mvaVariablesFile, EleMVA_3CategoriesCuts
+        import EleMVA_6CategoriesCuts, mvaVariablesFile, mvaVariablesFileRun3, mvaVariablesFileRun3NonIso, EleMVA_3CategoriesCuts
 
 from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_iso_V2_cff \
         import mvaWeightFiles as Fall17_iso_V2_weightFiles
 from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_noIso_V2_cff \
         import mvaWeightFiles as Fall17_noIso_V2_weightFiles
+from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_RunIIIWinter22_iso_V1_cff \
+        import mvaWeightFiles as RunIIIWinter22_iso_V1_weightFiles
+from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_RunIIIWinter22_noIso_V1_cff \
+        import mvaWeightFiles as RunIIIWinter22_noIso_V1_weightFiles
 from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring16_GeneralPurpose_V1_cff \
         import mvaSpring16WeightFiles_V1 as mvaSpring16GPWeightFiles_V1
 from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring16_HZZ_V1_cff \
         import mvaSpring16WeightFiles_V1 as mvaSpring16HZZWeightFiles_V1
+from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Winter22_HZZ_V1_cff \
+        import mvaWeightFiles as mvaWinter22HZZWeightFiles_V1
 
 from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Spring16_GeneralPurpose_V1_cff \
         import workingPoints as mvaSpring16GP_V1_workingPoints
@@ -109,10 +111,20 @@ from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_iso_V
         import workingPoints as Fall17_iso_V2_workingPoints
 from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Fall17_noIso_V2_cff \
         import workingPoints as Fall17_noIso_V2_workingPoints
+from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_RunIIIWinter22_iso_V1_cff \
+        import workingPoints as RunIIIWinter22_iso_V1_workingPoints
+from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_RunIIIWinter22_noIso_V1_cff \
+        import workingPoints as RunIIIWinter22_noIso_V1_workingPoints
+from RecoEgamma.ElectronIdentification.Identification.mvaElectronID_Winter22_HZZ_V1_cff \
+        import workingPoints as Winter22_HZZ_V1_workingPoints
 
 # Dictionary with the relecant e/gmma MVAs
 
 electron_mvas = {
+    "RunIIIWinter22IsoV1"   : ElectronMVAID("ElectronMVAEstimatorRun2","RunIIIWinter22IsoV1",
+                                            EleMVA_6CategoriesCuts, RunIIIWinter22_iso_V1_weightFiles, mvaVariablesFileRun3),
+    "RunIIIWinter22NoIsoV1" : ElectronMVAID("ElectronMVAEstimatorRun2","RunIIIWinter22NoIsoV1",
+                                            EleMVA_6CategoriesCuts, RunIIIWinter22_noIso_V1_weightFiles, mvaVariablesFileRun3NonIso),
     "Fall17IsoV2"   : ElectronMVAID("ElectronMVAEstimatorRun2","Fall17IsoV2",
                                     EleMVA_6CategoriesCuts, Fall17_iso_V2_weightFiles, mvaVariablesFile),
     "Fall17NoIsoV2" : ElectronMVAID("ElectronMVAEstimatorRun2","Fall17NoIsoV2",
@@ -121,9 +133,15 @@ electron_mvas = {
                                     EleMVA_6CategoriesCuts, mvaSpring16HZZWeightFiles_V1, mvaVariablesFile),
     "Spring16GPV1"    : ElectronMVAID("ElectronMVAEstimatorRun2","Spring16GeneralPurposeV1",
                                     EleMVA_3CategoriesCuts, mvaSpring16GPWeightFiles_V1, mvaVariablesFile),
+    "Winter22HZZV1"    : ElectronMVAID("ElectronMVAEstimatorRun2","Winter22HZZV1",
+                                    EleMVA_6CategoriesCuts, mvaWinter22HZZWeightFiles_V1, mvaVariablesFileRun3),    
     }
 
 working_points = {
+    "RunIIIWinter22IsoV1"   : WorkingPoints("ElectronMVAEstimatorRun2","RunIIIWinter22IsoV1",
+                                    RunIIIWinter22_iso_V1_workingPoints),
+    "RunIIIWinter22NoIsoV1" : WorkingPoints("ElectronMVAEstimatorRun2","RunIIIWinter22NoIsoV1",
+                                    RunIIIWinter22_noIso_V1_workingPoints),
     "Fall17IsoV2"   : WorkingPoints("ElectronMVAEstimatorRun2","Fall17IsoV2",
                                     Fall17_iso_V2_workingPoints),
     "Fall17NoIsoV2" : WorkingPoints("ElectronMVAEstimatorRun2","Fall17NoIsoV2",
@@ -132,5 +150,7 @@ working_points = {
                                     mvaSpring16HZZ_V1_workingPoints, logistic_transform=True),
     "Spring16GPV1"    : WorkingPoints("ElectronMVAEstimatorRun2","Spring16GeneralPurposeV1",
                                     mvaSpring16GP_V1_workingPoints, logistic_transform=True),
+    "Winter22HZZV1" : WorkingPoints("ElectronMVAEstimatorRun2","Winter22HZZV1",
+                                    Winter22_HZZ_V1_workingPoints),        
 
     }
