@@ -307,10 +307,8 @@ void PhotonIDValueMapProducer::produce(edm::StreamID, edm::Event& iEvent, const 
         }
 
         vars[10].push_back(chargedIsoSum);
-        vars[11].push_back(neutralHadronIsoSum*10000);
-        vars[12].push_back(photonIsoSum*10000);
-        print(photonIsoSum*10000);
-        print("hihihi")
+        vars[11].push_back(neutralHadronIsoSum);
+        vars[12].push_back(photonIsoSum);
 
         // Worst isolation computed with no vetos or ptMin cut, as in Run 1 Hgg code.
         unsigned char options = 0;
