@@ -162,35 +162,28 @@ calibratedPatElectronsNano = RecoEgamma.EgammaTools.calibratedEgammas_cff.calibr
 
 #the second part is introduced to protect v8 since (run2_nanoAOD_106Xv1 & ~run2_nanoAOD_devel) is the v8 condition
 (run2_egamma_2016 & tracker_apv_vfp30_2016 & ~(run2_nanoAOD_106Xv1 & ~run2_nanoAOD_devel)).toModify(calibratedPatElectronsNano,
-    # correctionFile = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2016_UltraLegacy_preVFP_RunFineEtaR9Gain")
     correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2016_UltraLegacy_preVFP_RunFineEtaR9Gain"
 )
 
 (run2_egamma_2016 & ~tracker_apv_vfp30_2016 & ~(run2_nanoAOD_106Xv1 & ~run2_nanoAOD_devel)).toModify(calibratedPatElectronsNano,
-    # correctionFile = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2016_UltraLegacy_postVFP_RunFineEtaR9Gain")
     correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2016_UltraLegacy_postVFP_RunFineEtaR9Gain"
 )
 
 run2_egamma_2017.toModify(calibratedPatElectronsNano,
-    # correctionFile = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_24Feb2020_runEtaR9Gain_v2")
     correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_24Feb2020_runEtaR9Gain_v2")
 
 run2_egamma_2018.toModify(calibratedPatElectronsNano,
-    # correctionFile = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2018_29Sep2020_RunFineEtaR9Gain")
     correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2018_29Sep2020_RunFineEtaR9Gain")
 
 run2_miniAOD_80XLegacy.toModify(calibratedPatElectronsNano,
-                                # correctionFile = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Legacy2016_07Aug2017_FineEtaR9_v3_ele_unc")
                                  correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Legacy2016_07Aug2017_FineEtaR9_v3_ele_unc"
                             )
 
 for modifier in run2_nanoAOD_94XMiniAODv1,run2_nanoAOD_94XMiniAODv2:
     modifier.toModify(calibratedPatElectronsNano,
-        # correctionFile = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_17Nov2017_v1_ele_unc")
 correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2017_17Nov2017_v1_ele_unc"    )
 
 run2_nanoAOD_102Xv1.toModify(calibratedPatElectronsNano,
-    # correctionFile = cms.string("EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2018_Step2Closure_CoarseEtaR9Gain_v2")
 correctionFile = "EgammaAnalysis/ElectronTools/data/ScalesSmearings/Run2018_Step2Closure_CoarseEtaR9Gain_v2")
 ##############################end calibratedPatElectronsNano############################
 
@@ -201,8 +194,6 @@ slimmedElectronsWithUserData = cms.EDProducer("PATElectronUserDataEmbedder",
         mvaFall17V1noIso = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17NoIsoV1Values"),
         mvaFall17V2Iso = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17IsoV2Values"),
         mvaFall17V2noIso = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Fall17NoIsoV2Values"),
-        # mvaIso = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2RunIIIWinter22IsoV1Values"),
-        # mvaNoIso = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2RunIIIWinter22NoIsoV1Values"),
         mvaHZZIso = cms.InputTag("electronMVAValueMapProducer:ElectronMVAEstimatorRun2Winter22HZZV1Values"),
         miniIsoChg = cms.InputTag("isoForEle:miniIsoChg"),
         miniIsoAll = cms.InputTag("isoForEle:miniIsoAll"),
@@ -360,8 +351,6 @@ electronMVATTH= cms.EDProducer("EleBaseMVAValueMapProducer",
         LepGood_dxy = cms.string("log(abs(dB('PV2D')))"),
         LepGood_sip3d = cms.string("abs(dB('PV3D')/edB('PV3D'))"),
         LepGood_dz = cms.string("log(abs(dB('PVDZ')))"),
-        # LepGood_mvaFall17V2noIso = cms.string("userFloat('mvaNoIso_Fall17V2')"),
-        # LepGood_mvaFall17V2noIso = cms.string("userFloat('mvaNoIso')"),
         LepGood_mvaFall17V2noIso = cms.string("userFloat('mvaFall17V2noIso')"),
     )
 )
@@ -393,19 +382,17 @@ electronTable = cms.EDProducer("SimpleCandidateFlatTableProducer",
         eInvMinusPInv = Var("(1-eSuperClusterOverP())/ecalEnergy()",float,doc="1/E_SC - 1/p_trk",precision=10),
         scEtOverPt = Var("(superCluster().energy()/(pt*cosh(superCluster().eta())))-1",float,doc="(supercluster transverse energy)/pt-1",precision=8),
 
-        # mvaFall17V2Iso = Var("userFloat('mvaFall17V2Iso')",float,doc="MVA Iso ID V2 score"),
+        mvaFall17V2Iso = Var("userFloat('mvaFall17V2Iso')",float,doc="MVA Iso ID V2 score"),
         mvaFall17V2Iso_WP80 = Var("userInt('mvaFall17V2Iso_WP80')",bool,doc="MVA Iso ID V2 WP80"),
         mvaFall17V2Iso_WP90 = Var("userInt('mvaFall17V2Iso_WP90')",bool,doc="MVA Iso ID V2 WP90"),
         mvaFall17V2Iso_WPL = Var("userInt('mvaFall17V2Iso_WPL')",bool,doc="MVA Iso ID V2 loose WP"),
-        # mvaFall17V2noIso = Var("userFloat('mvaFall17V2noIso')",float,doc="MVA noIso ID V2 score"),
+        mvaFall17V2noIso = Var("userFloat('mvaFall17V2noIso')",float,doc="MVA noIso ID V2 score"),
         mvaFall17V2noIso_WP80 = Var("userInt('mvaFall17V2noIso_WP80')",bool,doc="MVA noIso ID V2 WP80"),
         mvaFall17V2noIso_WP90 = Var("userInt('mvaFall17V2noIso_WP90')",bool,doc="MVA noIso ID V2 WP90"),
         mvaFall17V2noIso_WPL = Var("userInt('mvaFall17V2noIso_WPL')",bool,doc="MVA noIso ID V2 loose WP"),
-        # mvaIso = Var("userFloat('mvaIso')",float,doc="MVA Iso ID V2 score"),
         mvaIso_WP80 = Var("userInt('mvaIso_WP80')",bool,doc="MVA Iso ID V2 WP80"),
         mvaIso_WP90 = Var("userInt('mvaIso_WP90')",bool,doc="MVA Iso ID V2 WP90"),
         mvaIso_WPL = Var("userInt('mvaIso_WPL')",bool,doc="MVA Iso ID V2 loose WP"),
-        # mvaNoIso = Var("userFloat('mvaNoIso')",float,doc="MVA noIso ID V2 score"),
         mvaNoIso_WP80 = Var("userInt('mvaNoIso_WP80')",bool,doc="MVA noIso ID V2 WP80"),
         mvaNoIso_WP90 = Var("userInt('mvaNoIso_WP90')",bool,doc="MVA noIso ID V2 WP90"),
         mvaNoIso_WPL = Var("userInt('mvaNoIso_WPL')",bool,doc="MVA noIso ID V2 loose WP"),
